@@ -1,0 +1,27 @@
+# Paso 1: Crear dos listas de números enteros
+lista1 = [1, 2, 3, 4, 5]
+lista2 = [3, 4, 5, 6, 7]
+
+# Paso 2: Encontrar números comunes
+numeros_comunes = [num for num in lista1 if num in lista2]
+
+# Paso 3: Encontrar números exclusivos de lista1
+numeros_exclusivos_lista1 = [num for num in lista1 if num not in lista2]
+
+# Paso 4: Encontrar números exclusivos de lista2
+numeros_exclusivos_lista2 = [num for num in lista2 if num not in lista1]
+
+# Paso 5: Calcular las sumas
+suma_comunes = sum(numeros_comunes)
+suma_exclusivos_lista1 = sum(numeros_exclusivos_lista1)
+suma_exclusivos_lista2 = sum(numeros_exclusivos_lista2)
+
+# Paso 6: Imprimir los resultados
+print("Lista 1:", lista1)
+print("Lista 2:", lista2)
+print("Números comunes:", numeros_comunes)
+print("Números exclusivos de Lista 1:", numeros_exclusivos_lista1)
+print("Números exclusivos de Lista 2:", numeros_exclusivos_lista2)
+print("Suma de números comunes:", suma_comunes)
+print("Suma de números exclusivos de Lista 1:", suma_exclusivos_lista1)
+print("Suma de números exclusivos de Lista 2:", suma_exclusivos_lista2)

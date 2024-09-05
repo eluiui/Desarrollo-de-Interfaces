@@ -1,0 +1,204 @@
+import random
+
+'''
+    recibirDano -> Funcion que sirve para recibir dano el personaje
+    ganarExperiencia -> Funcion para que el heroe gane experiencia
+    usarPocionCurativa -> Funcion que nos resta una pocion del 'inventario'
+    curarVidaPocion -> Funcion que permite usar la pocion para que el heroe recupere vida
+    fuerzaPocion -> Funcion que permite aumentar momentanamente la fuerza del heroe
+    congelacionPocion -> Funcion que resta una pocion del 'inventario'
+    
+'''
+class Enemigo:
+    def __init__(self,nombre,vida,ataque,experiencia):
+        #Sacamos un nombre aleatorio del enemigo
+        self.nombre = random.choice(["Orco","Esqueleto","Bandido","No-Muerto","Troll","Guerrero","Bestia","Demonio"])
+        self.vida = random.randint(10,30)
+        self.ataque = random.randint(2,8)
+        self.experiencia = random.randint(1,5)     
+    
+    def recibirDano(ataqueH,vidaE):
+        vidaE = vidaE - ataqueH
+        return vidaE
+    
+    
+class Heroe:
+    def __init__(self,nombre,vida,ataque,experiencia,pocionCurativa,pocionFuerza,pocionCongelacion):
+        self.nombre = nombre
+        self.vida = 35
+        self.ataque = 3
+        self.experiencia = 0
+        self.pocionCurativa = random.randint(1,10)
+        self.pocionFuerza = random.randint(1,3)
+        self.pocionCongelacion = random.randint(1,5)
+        
+    def recibirDano(ataqueE,vidaH):
+        vidaH = vidaH - ataqueE
+        return vidaH
+    
+    def ganarExperiencia(expH,expE):
+        expH = expH + expE
+        return expH
+    
+    def usarPocionCurativa(pocion):
+        pocion = pocion - 1
+        return pocion
+    
+    def curarVidaPocion(vidaH):
+        vidaH = vidaH + 10
+        return vidaH
+    
+    def fuerzaPocion(ataque,fuerzaAleatoria):
+        ataque = ataque + fuerzaAleatoria
+        return ataque
+    
+    def congelacionPocion(congelacionP):
+        congelacionP = congelacionP - 1
+        return congelacionP
+           
+        
+def main():
+    heroe = Heroe("",0,0,0,0,0,0)
+    enemigo = Enemigo("",0,0,0)
+    opcion = 0
+       
+    #lIMITE PARA ACABAR LA PARTIDA
+    monstruosMatados = 0
+    numeroVictoriosoMonstruos = 3
+    numeroExperienciaVictoriosa = 10
+    
+    isFuerza = False
+    isCongelacion = False
+    
+    print("[ !Bienvenido jugador! ] \n[ NORMAS ] \n 1-Para completar el juego tienes que matar X montruos o obtener X experiencia \n 2-Si te matan es GameOver \n 3-Para reclamar la recompensa de haber matado a un monstruo tienes que hacer que 'lotearlo' para qu aparezca el siguiente \nDame un nombre para tu caballero: ")
+    heroe.nombre = input("")
+
+    while (opcion != 6):
+        print("")
+        opcion = int(input(f"Escoge opcion mi Lord {heroe.nombre}:\n 1 - Comprobar estadisticas: \n 2 - Comprobar enemigo a luchar \n 3 - Luchar \n 4 - Huir \n 5 - Pociones  \n 6 - Salir"))
+        # Mostramos los datos del heroe
+        if(opcion == 1):
+            print("[ DATOS HEROE ] \nNombre:",heroe.nombre,"\nVida:",heroe.vida,"\nAtaque:",heroe.ataque,"\nExperiencia:",heroe.experiencia,"\nNº Pociones Curativas:",heroe.pocionCurativa,"\nNº Pociones Fuerza:",heroe.pocionFuerza,"\nNº Pociones Congelacion:",heroe.pocionCongelacion)   
+        # Mostramos los datos del enemigo
+        if(opcion == 2):
+            print("[ DATOS ENEMIGO ] \nNombre:",enemigo.nombre,"\nVida:",enemigo.vida,"\nAtaque:",enemigo.ataque,"\nExperiencia:",enemigo.experiencia,)
+            if(isCongelacion == True):
+                print("Congelacion:",numeroCongelacion,"restantes")
+            elif(isCongelacion == False):
+                print("Congelacion: No")
+                
+        # Comprobamos si tienen vida, si tienen luchan, si hemos usado unas pociones antes hacen los efectos en caso de que ninguno no tenga vida o crea un nuevo enemigo, se gana o pierde
+        if(opcion == 3):
+            if(heroe.vida >=1 and enemigo.vida >= 1):
+                print("[ TURNO HEROE ]")
+                esquivar = random.randint(1,6)
+                if(esquivar %2== 0):
+                    if(isFuerza == True):
+                        print("El enemigo a esquivado el ataque y vuelves al ataque base, mas suerte la proxima vez")
+                        heroe.ataque = fuerzaBase
+                        isFuerza = False
+                    elif(isFuerza == False):
+                        print("El enemigo a esquivado el ataque")
+                elif(esquivar%2!= 0):
+                    print("Atacando al enemigo",heroe.ataque," de daño")
+                    enemigo.vida = Enemigo.recibirDano(heroe.ataque,enemigo.vida)
+                    if(isFuerza == True):
+                        print("Se te acabo el efecto de Fuerza, volviendo al ataque base..")
+                        heroe.ataque = fuerzaBase
+                        isFuerza = False
+                
+                print("[ TURNO ENEMIGO ]")
+                if(isCongelacion == True):
+                    if(numeroCongelacion <= 0):
+                        print("Enemigo descongelado...")
+                        print("Enemigo atacando con:",enemigo.ataque,"de daño")
+                        heroe.vida = Heroe.recibirDano(enemigo.ataque,heroe.vida)
+                        isCongelacion = False
+                    elif(numeroCongelacion >= 1):
+                        numeroCongelacion-=1
+                        print("Enemigo congelado durante...",numeroCongelacion)
+                        
+                elif(isCongelacion == False):
+                    print("Enemigo atacando con:",enemigo.ataque,"de daño")
+                    heroe.vida = Heroe.recibirDano(enemigo.ataque,heroe.vida)
+                    
+            elif(heroe.vida <=0 or enemigo.vida <=0):
+                if(heroe.vida <=0 ):
+                    print("Heroe Muerto \n [ GAME OVER ]")
+                    break
+                elif(enemigo.vida <=0):
+                    isCongelacion = False
+                    print("El enemigo:", enemigo.nombre,"esta muerto")
+                    print("LOOTEANDO LA EXPERIENCIA...:")
+                    heroe.experiencia = Heroe.ganarExperiencia(heroe.experiencia,enemigo.experiencia)
+                    monstruosMatados+=1
+                    if(monstruosMatados >= numeroVictoriosoMonstruos or heroe.experiencia >= numeroExperienciaVictoriosa):
+                        print("___________ \n[ VICTORY ] \n___________")
+                        break
+                    else:
+                        print("... GENERANDO UN NUEVO ENEMIGO ...")
+                        enemigo = Enemigo(enemigo.nombre,enemigo.vida,enemigo.ataque,enemigo.experiencia)
+                        
+        # El heroe se retira y genera un nuevo enemigo contra cual luchar
+        if(opcion == 4):
+            print("Huyendo como una ga-ga-gallina a por el siguiente enemigo")
+            #Crearemos un nuevo enemigo
+            enemigo = Enemigo(enemigo.nombre,enemigo.vida,enemigo.ataque,enemigo.experiencia)
+            print("... ENEMIGO ENCONTRADO ...")
+            
+        # Opcion para aumentar un poco las caracteristicas de nuestor personaje    
+        if(opcion == 5):   
+            if(heroe.vida <= 0):
+                print("No puedes usar x pocion estando muerto")
+            elif(heroe.vida >= 1):
+                print("")
+                print("Que pocion deseas usar:\n 1 - Pocion de curacion [+10 de vida] \n 2 - Aumenta momentaniamente la fuerza [ +? de fuerza]\n 3 - Congela al enemigo X turnos")
+                opcionPocion = int(input("Dime una opcion"))
+                if(opcionPocion == 1):
+                    if(heroe.pocionCurativa >= 1):
+                        print("Usando la pocion curativa:")
+                        heroe.pocionCurativa = Heroe.usarPocionCurativa(heroe.pocionCurativa)
+                        heroe.vida = Heroe.curarVidaPocion(heroe.vida)
+                    elif(heroe.pocionCurativa <=0):
+                        print("No te quedan pociones para usar")
+                elif(opcionPocion == 2):
+                    if(heroe.pocionFuerza >= 1):
+                        fuerzaAleatoria = random.randint(1,100)
+                        fuerzaBase = heroe.ataque
+                        heroe.ataque = Heroe.fuerzaPocion(heroe.ataque,fuerzaAleatoria)
+                        print("Usando pocion de fuerza +",fuerzaAleatoria)
+                        isFuerza = True
+                    elif(heroe.pocionFuerza <= 0):
+                        print("No te quedan pociones de fuerza")
+                elif(opcionPocion == 3):
+                    if(isCongelacion == True):
+                        if(enemigo.vida <= 0):
+                            print("No puedes usar la pocion en un enemigo muerto")
+                        elif(enemigo.vida >=1):
+                            if(heroe.pocionCongelacion >= 1):
+                                newCongelacion = random.randint(1,3)
+                                numeroCongelacion = numeroCongelacion + newCongelacion
+                                print("Usando otra pocion de congelacion encima... [turnos",numeroCongelacion,"]")
+                                heroe.pocionCongelacion = Heroe.congelacionPocion(heroe.pocionCongelacion)
+                                isCongelacion = True
+                            elif(heroe.pocionCongelacion <= 0):
+                                print("No te quedan pociones para congelar mas")
+                    elif(isCongelacion == False):
+                        if(enemigo.vida <= 0):
+                            print("No puedes usar la pocion en un enemigo muerto")
+                        elif(enemigo.vida >=1):
+                            if(heroe.pocionCongelacion >= 1):
+                                numeroCongelacion = random.randint(1,3)
+                                print("El enemigo estará congelado... [turnos",numeroCongelacion,"]")
+                                heroe.pocionCongelacion = Heroe.congelacionPocion(heroe.pocionCongelacion)
+                                isCongelacion = True
+                            elif(heroe.pocionCongelacion <= 0):
+                                print("Sin pociones de congelacion para usar")
+                else:
+                    print("Pocion no encontrada")
+        
+        if(opcion == 6):
+            print("\nGRACIAS POR JUGAR \nHASTA LA PROXIMA....")
+            
+if __name__ == "__main__":
+    main()
